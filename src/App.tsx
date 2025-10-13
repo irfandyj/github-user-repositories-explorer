@@ -1,31 +1,59 @@
-
 import './App.css'
 import { Card, CardContent } from './components/ui/card'
-import { Field, FieldLabel, FieldError, FieldGroup, FieldSet, FieldLegend } from './components/ui/field'
-import { InputGroup, InputGroupInput, InputGroupAddon } from './components/ui/input-group'
-import { Search } from 'lucide-react'
+import { FieldSet, FieldLegend } from './components/ui/field'
+import { useRequest } from 'alova/client';
+import Apis from './api/github'
+import SearchUserForm from './components/molecules/SearchUserForm'
+import { searchUserFormSchema } from './components/molecules/SearchUserForm/SearchUserForm.schema'
+import * as z from 'zod'
+
+function searchGitHubUser(username: string) {
+  return Apis.search.searchUsers({
+    params: {
+      q: username,
+      limit: 5,
+    }
+  })
+}
 
 function App() {
+  const {
+    // submit status
+    loading,
+
+    // Responsive form data, the content is determined by initialForm
+    data,
+
+    // submit data function
+    send,
+
+    // update form item
+    update,
+
+    // Submit successful callback binding
+    onSuccess,
+
+    // Submit failure callback binding
+    onError,
+
+    // Submit completed callback binding
+    onComplete
+  } = useRequest(searchGitHubUser, {
+    immediate: false,
+  })
+
+  function onSubmit(data: z.infer<typeof searchUserFormSchema>) {
+    send(data.username)
+  }
 
   return (
     <>
       <div className="flex justify-center items-center h-screen w-screen p-4">
         <Card className="w-full max-w-md">
           <CardContent>
-
             <FieldSet>
               <FieldLegend>GitHub User Repositories Explorer</FieldLegend>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="search" className="sr-only">Search</FieldLabel>
-                  <InputGroup className="border-border bg-background">
-                    <InputGroupInput id="search" placeholder="Search..." />
-                    <InputGroupAddon>
-                      <Search />
-                    </InputGroupAddon>
-                  </InputGroup>
-                </Field>
-              </FieldGroup>
+              <SearchUserForm loading={loading} onSubmit={onSubmit} />
             </FieldSet>
 
           </CardContent>
