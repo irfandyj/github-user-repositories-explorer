@@ -1,33 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
+import { Card, CardContent } from './components/ui/card'
+import { Field, FieldLabel, FieldError, FieldGroup, FieldSet, FieldLegend } from './components/ui/field'
+import { InputGroup, InputGroupInput, InputGroupAddon } from './components/ui/input-group'
+import { Search } from 'lucide-react'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="flex justify-center items-center h-screen w-screen p-4">
+        <Card className="w-full max-w-md">
+          <CardContent>
+
+            <FieldSet>
+              <FieldLegend>GitHub User Repositories Explorer</FieldLegend>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="search" className="sr-only">Search</FieldLabel>
+                  <InputGroup className="border-border bg-background">
+                    <InputGroupInput id="search" placeholder="Search..." />
+                    <InputGroupAddon>
+                      <Search />
+                    </InputGroupAddon>
+                  </InputGroup>
+                </Field>
+              </FieldGroup>
+            </FieldSet>
+
+          </CardContent>
+        </Card>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
