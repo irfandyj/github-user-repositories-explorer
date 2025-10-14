@@ -43,11 +43,12 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
     send: searchUserSend,
   } = useRequest(searchGitHubUser, {
     immediate: false,
-    initialData: {
-      incomplete_results: false,
-      total_count: 0,
-      items: [],
-    },
+    // initialData: {
+    //   incomplete_results: false,
+    //   total_count: 0,
+    //   items: [],
+    // },
+    initialData: undefined,
   })
   const {
     loading: searchReposByUsernameLoading,
@@ -59,8 +60,11 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
   })
 
   const displayedUsers = useMemo(() => {
+    if (!searchUserResponse) {
+      return undefined
+    }
     return searchUserResponse.items.slice(0, 5)
-  }, [searchUserResponse.items])
+  }, [searchUserResponse])
 
   function onSubmit(data: z.infer<typeof searchUserFormSchema>) {
     searchUserSend(data.username)

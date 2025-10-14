@@ -1,9 +1,15 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ExternalLink, Loader2, Star } from "lucide-react";
+import { ExternalLink, Loader2, Star, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import type { Minimal_repository } from "@/api/github/globals";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 
 type SearchUserAccordionProps = {
   users: {
@@ -11,9 +17,15 @@ type SearchUserAccordionProps = {
     login: string
     avatar_url: string
     html_url: string
-  }[],
+  }[] | undefined,
   loading: boolean,
-  data: Minimal_repository[],
+  data: {
+    id: number
+    name: string
+    html_url: string
+    description: string | null
+    stargazers_count?: number
+  }[],
   send: (username: string) => void,
 }
 
@@ -25,93 +37,111 @@ export default function SearchUserAccordion(
     send(username)
   }
 
-  return (
-    <Accordion type="single" collapsible data-testid="search-user-accordion">
-      {users.map((user) => (
-        <AccordionItem key={user.id} value={user.id.toString()}>
-          <AccordionTrigger
-            className="flex items-center gap-2 px-6"
-            onClick={(e) => {
-              const isOpen = e.currentTarget.getAttribute('data-state') !== 'open'
-              if (isOpen) {
-                onAccordionTriggerClick(user.login)
-              }
-            }}
-          >
-            <Avatar>
-              <AvatarImage src={user.avatar_url} />
-              <AvatarFallback>{user.login.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <a
-              href={user.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-              text-muted-foreground
-              hover:underline
-              hover:text-primary
-              flex items-center gap-1
-              group
-            "
-            >
-              {user.login}
-              <ExternalLink
-                size={16}
-                className="hidden
-                group-hover:block group-hover:text-primary
-              "
-              />
-            </a>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            {loading ?
-              <Loader2 className="animate-spin" /> : (
-                <div className="flex flex-col gap-2">
-                  {data.length > 0 ?
-                    data.map((repo) => (
-                      <Card key={repo.id} className="flex flex-col gap-2">
-                        <CardHeader className="flex justify-between items-center">
-                          <CardTitle>
-                            <a
-                              href={repo.html_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="
-                              text-muted-foreground
-                              hover:underline
-                              hover:text-primary
-                              flex items-center gap-1
-                              group
-                            "
-                            >
-                              {repo.name}
+  switch (typeof users) {
+    case 'undefined':
+      return null
+    default:
+      if (users.length === 0) {
+        return (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Users />
+              </EmptyMedia>
+              <EmptyTitle>No data</EmptyTitle>
+              <EmptyDescription>No data found</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        )
+      }
+      return (
+        <Accordion type="single" collapsible data-testid="search-user-accordion">
+          {users.map((user) => (
+            <AccordionItem key={user.id} value={user.id.toString()}>
+              <AccordionTrigger
+                className="flex items-center gap-2 px-6"
+                onClick={(e) => {
+                  const isOpen = e.currentTarget.getAttribute('data-state') !== 'open'
+                  if (isOpen) {
+                    onAccordionTriggerClick(user.login)
+                  }
+                }}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} />
+                  <AvatarFallback>{user.login.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <a
+                  href={user.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                  text-muted-foreground
+                  hover:underline
+                  hover:text-primary
+                  flex items-center gap-1
+                  group
+                "
+                >
+                  {user.login}
+                  <ExternalLink
+                    size={16}
+                    className="hidden
+                    group-hover:block group-hover:text-primary
+                  "
+                  />
+                </a>
+              </AccordionTrigger>
+              <AccordionContent className="px-6">
+                {loading ?
+                  <Loader2 className="animate-spin" /> : (
+                    <div className="flex flex-col gap-2">
+                      {data.length > 0 ?
+                        data.map((repo) => (
+                          <Card key={repo.id} className="flex flex-col gap-2">
+                            <CardHeader className="flex justify-between items-center">
+                              <CardTitle>
+                                <a
+                                  href={repo.html_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="
+                                  text-muted-foreground
+                                  hover:underline
+                                  hover:text-primary
+                                  flex items-center gap-1
+                                  group
+                                "
+                                >
+                                  {repo.name}
 
-                              <ExternalLink
-                                size={16}
-                                className="hidden
-                                group-hover:block group-hover:text-primary
-                              "
-                              />
-                            </a>
-                          </CardTitle>
-                          <Badge variant="secondary">
-                            {repo.stargazers_count}
-                            <Star size={16} />
-                          </Badge>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-sm text-muted-foreground">
-                            {repo.description}
-                          </p>
-                        </CardContent>
-                      </Card>
-                    )) :
-                    <div className="text-sm text-muted-foreground">No repositories found</div>}
-                </div>
-              )}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
-  );
+                                  <ExternalLink
+                                    size={16}
+                                    className="hidden
+                                    group-hover:block group-hover:text-primary
+                                  "
+                                  />
+                                </a>
+                              </CardTitle>
+                              <Badge variant="secondary">
+                                {repo.stargazers_count}
+                                <Star size={16} />
+                              </Badge>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-muted-foreground">
+                                {repo.description}
+                              </p>
+                            </CardContent>
+                          </Card>
+                        )) :
+                        <div className="text-sm text-muted-foreground">No repositories found</div>}
+                    </div>
+                  )}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      );
+  }
 }
