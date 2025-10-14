@@ -1,7 +1,7 @@
 import SearchUserForm from "@/components/molecules/SearchUserForm";
 import type { searchUserFormSchema } from "@/components/molecules/SearchUserForm/SearchUserForm.schema";
 import Apis from "@/api/github";
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import {
@@ -9,11 +9,11 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 import { useRequest } from "alova/client";
 import * as z from 'zod';
 import { cn } from "@/lib/utils";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import useResponsiveParentHeight from "@/hooks/useResponsiveParentHeight";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
