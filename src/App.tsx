@@ -11,7 +11,6 @@ function searchGitHubUser(username: string) {
   return Apis.search.searchUsers({
     params: {
       q: username,
-      limit: 5,
     }
   })
 }
@@ -40,6 +39,11 @@ function App() {
     onComplete
   } = useRequest(searchGitHubUser, {
     immediate: false,
+    initialData: {
+      incomplete_results: false,
+      total_count: 0,
+      items: [],
+    },
   })
 
   function onSubmit(data: z.infer<typeof searchUserFormSchema>) {
@@ -49,12 +53,22 @@ function App() {
   return (
     <>
       <div className="flex justify-center items-center h-screen w-screen p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-h-10/12 max-w-md overflow-hidden">
           <CardContent>
             <FieldSet>
               <FieldLegend>GitHub User Repositories Explorer</FieldLegend>
               <SearchUserForm loading={loading} onSubmit={onSubmit} />
             </FieldSet>
+
+            <div className='mt-4 size-full'>
+              {data.items.length > 0 && (
+                <ul className="list-disc list-inside">
+                  {data.items.map((user) => (
+                    <li key={user.id}>{user.login}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
           </CardContent>
         </Card>
