@@ -3,21 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ExternalLink, Loader2, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import Apis from "@/api/github";
-import { useRequest } from "alova/client";
-
-
-function getReposByUser(username: string) {
-  return Apis.repos.reposListForUser({
-    pathParams: {
-      username,
-    },
-    params: {
-      per_page: 100,
-      page: 1
-    }
-  })
-}
+import type { Minimal_repository } from "@/api/github/globals";
 
 type SearchUserAccordionProps = {
   users: {
@@ -26,19 +12,14 @@ type SearchUserAccordionProps = {
     avatar_url: string
     html_url: string
   }[],
+  loading: boolean,
+  data: Minimal_repository[],
+  send: (username: string) => void,
 }
 
-
-export default function SearchUserAccordion({ users }: SearchUserAccordionProps) {
-
-  const {
-    loading,
-    data,
-    send,
-  } = useRequest(getReposByUser, {
-    immediate: false,
-    initialData: [],
-  })
+export default function SearchUserAccordion(
+  { users, loading, data, send }: SearchUserAccordionProps
+) {
 
   function onAccordionTriggerClick(username: string) {
     send(username)

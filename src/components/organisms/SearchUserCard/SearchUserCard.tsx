@@ -19,6 +19,17 @@ function searchGitHubUser(username: string) {
   })
 }
 
+function getReposByUsername(username: string) {
+  return Apis.repos.reposListForUser({
+    pathParams: {
+      username,
+    },
+    params: {
+      per_page: 100,
+      page: 1
+    }
+  })
+}
 
 type SearchUserCardProps = {
   className?: string
@@ -27,15 +38,9 @@ type SearchUserCardProps = {
 export default function SearchUserCard({ className }: SearchUserCardProps) {
   const { ref: scrollAreaRef } = useResponsiveParentHeight()
   const {
-    // submit status
     loading: searchUserLoading,
-
-    // Responsive form data, the content is determined by initialForm
     data: searchUserResponse,
-
-    // submit data function
     send: searchUserSend,
-
   } = useRequest(searchGitHubUser, {
     immediate: false,
     initialData: {
@@ -43,6 +48,14 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
       total_count: 0,
       items: [],
     },
+  })
+  const {
+    loading: searchReposByUsernameLoading,
+    data: searchReposByUsernameResponse,
+    send: searchReposByUsernameSend,
+  } = useRequest(getReposByUsername, {
+    immediate: false,
+    initialData: [],
   })
 
   const displayedUsers = useMemo(() => {
@@ -66,7 +79,12 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
             ref={scrollAreaRef}
             className="bg-background h-full"
           >
-            <SearchUserAccordion users={displayedUsers} />
+            <SearchUserAccordion
+              users={displayedUsers}
+              loading={searchReposByUsernameLoading}
+              data={searchReposByUsernameResponse}
+              send={searchReposByUsernameSend}
+            />
           </ScrollArea>
         </div>
 
