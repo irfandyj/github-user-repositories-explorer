@@ -1,0 +1,136 @@
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ExternalLink, Loader2, Star } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import Apis from "@/api/github";
+import { useRequest } from "alova/client";
+
+
+function getReposByUser(username: string) {
+  return Apis.repos.reposListForUser({
+    pathParams: {
+      username,
+    },
+    params: {
+      per_page: 100,
+      page: 1
+    }
+  })
+}
+
+type SearchUserAccordionProps = {
+  users: {
+    id: number
+    login: string
+    avatar_url: string
+    html_url: string
+  }[],
+}
+
+
+export default function SearchUserAccordion({ users }: SearchUserAccordionProps) {
+
+  const {
+    loading,
+    data,
+    send,
+  } = useRequest(getReposByUser, {
+    immediate: false,
+    initialData: [],
+  })
+
+  function onAccordionTriggerClick(username: string) {
+    send(username)
+  }
+
+  return (
+    <Accordion type="single" collapsible>
+      {users.map((user) => (
+        <AccordionItem key={user.id} value={user.id.toString()}>
+          <AccordionTrigger
+            className="flex items-center gap-2 px-6"
+            onClick={(e) => {
+              const isOpen = e.currentTarget.getAttribute('data-state') !== 'open'
+              if (isOpen) {
+                onAccordionTriggerClick(user.login)
+              }
+            }}
+          >
+            <Avatar>
+              <AvatarImage src={user.avatar_url} />
+              <AvatarFallback>{user.login.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <a
+              href={user.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+              text-muted-foreground
+              hover:underline
+              hover:text-primary
+              flex items-center gap-1
+              group
+            "
+            >
+              {user.login}
+              <ExternalLink
+                size={16}
+                className="hidden
+                group-hover:block group-hover:text-primary
+              "
+              />
+            </a>
+          </AccordionTrigger>
+          <AccordionContent className="px-6">
+            {loading ?
+              <Loader2 className="animate-spin" /> : (
+                <div className="flex flex-col gap-2">
+                  {data.length > 0 ?
+                    data.map((repo) => (
+                      <Card key={repo.id} className="flex flex-col gap-2">
+                        <CardHeader className="flex justify-between items-center">
+                          <CardTitle>
+                            <a
+                              href={repo.html_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="
+                              text-muted-foreground
+                              hover:underline
+                              hover:text-primary
+                              flex items-center gap-1
+                              group
+                            "
+                            >
+                              {repo.name}
+
+                              <ExternalLink
+                                size={16}
+                                className="hidden
+                                group-hover:block group-hover:text-primary
+                              "
+                              />
+                            </a>
+                          </CardTitle>
+                          <Badge variant="secondary">
+                            {repo.stargazers_count}
+                            <Star size={16} />
+                          </Badge>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground">
+                            {repo.description}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    )) :
+                    <div className="text-sm text-muted-foreground">No repositories found</div>}
+                </div>
+              )}
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  );
+}
