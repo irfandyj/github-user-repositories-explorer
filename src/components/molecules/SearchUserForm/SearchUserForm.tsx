@@ -47,10 +47,7 @@ export default function SearchUserForm({ onSubmit, loading }: SearchUserFormProp
       </FieldGroup>
       <Button
         type="submit"
-        disabled={
-          loading ||
-          (form.formState.isSubmitted && !form.formState.isValid)
-        }
+        disabled={loading || !form.formState.isValid}
         className="w-full">
         {loading ? 'Searching...' : 'Search'}
       </Button>
