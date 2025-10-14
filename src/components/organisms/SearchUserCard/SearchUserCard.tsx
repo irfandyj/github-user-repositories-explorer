@@ -60,15 +60,16 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
 
   return (
     <Card className={cn("w-full max-w-md overflow-hidden", className)}>
-      <CardContent className="flex flex-col grow gap-4 px-0">
+      <CardContent className="flex flex-col grow gap-4 px-0 min-h-0">
         <FieldSet className="px-6">
           <FieldLegend>GitHub User Repositories Explorer</FieldLegend>
           <SearchUserForm loading={loading} onSubmit={onSubmit} />
         </FieldSet>
 
-        <div className="SearchUserCard__search-result flex-1 border-t border-b">
+        <div className="SearchUserCard__search-result flex-1 border-t border-b min-h-0">
           <ScrollArea
             ref={scrollAreaRef}
+            className="h-full"
           >
             <Accordion type="single" collapsible>
               {displayedUsers.map((user) => (
