@@ -4,10 +4,17 @@ import Apis from "@/api/github";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent } from "@/components/ui/card";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { useRequest } from "alova/client";
 import * as z from 'zod';
 import { cn } from "@/lib/utils";
-import { useScrollAreaHeight } from "@/hooks/useScrollAreaHeight";
+import { useEffect, useRef, useState } from "react";
+import useResponsiveParentHeight from "@/hooks/useResponsiveParentHeight";
 
 function searchGitHubUser(username: string) {
   return Apis.search.searchUsers({
@@ -22,6 +29,7 @@ type SearchUserCardProps = {
 }
 
 export default function SearchUserCard({ className }: SearchUserCardProps) {
+  const { ref: scrollAreaRef } = useResponsiveParentHeight()
   const {
     // submit status
     loading,
@@ -41,36 +49,35 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
     },
   })
 
-  const {
-    ref: scrollAreaRef,
-    height: scrollAreaHeight,
-  } = useScrollAreaHeight({ bottomGap: 16 })
-
   function onSubmit(data: z.infer<typeof searchUserFormSchema>) {
     send(data.username)
   }
 
   return (
     <Card className={cn("w-full max-w-md overflow-hidden", className)}>
-      <CardContent className="flex flex-col gap-4 px-0">
+      <CardContent className="flex flex-col grow gap-4 px-0">
         <FieldSet className="px-6">
           <FieldLegend>GitHub User Repositories Explorer</FieldLegend>
           <SearchUserForm loading={loading} onSubmit={onSubmit} />
         </FieldSet>
 
-        {data.items.length > 0 && (
+        <div className="SearchUserCard__search-result flex-1">
           <ScrollArea
             ref={scrollAreaRef}
             className='px-6'
-            style={{ height: scrollAreaHeight || undefined }}
           >
-            <ul className="list-disc list-inside">
+            <Accordion type="single" collapsible>
               {data.items.map((user) => (
-                <li key={user.id}>{user.login}</li>
+                <AccordionItem key={user.id} value={user.id.toString()}>
+                  <AccordionTrigger>{user.login}</AccordionTrigger>
+                  <AccordionContent>
+                    {user.html_url}
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </ul>
+            </Accordion>
           </ScrollArea>
-        )}
+        </div>
 
       </CardContent>
     </Card>
