@@ -36,8 +36,6 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
     // submit data function
     send: searchUserSend,
 
-    onError: searchUserOnError,
-
   } = useRequest(searchGitHubUser, {
     immediate: false,
     initialData: {
