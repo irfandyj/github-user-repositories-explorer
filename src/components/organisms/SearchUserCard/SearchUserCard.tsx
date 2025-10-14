@@ -69,7 +69,7 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
         <div className="SearchUserCard__search-result flex-1 border-t border-b min-h-0">
           <ScrollArea
             ref={scrollAreaRef}
-            className="h-full"
+            className="bg-background h-full"
           >
             <Accordion type="single" collapsible>
               {displayedUsers.map((user) => (
