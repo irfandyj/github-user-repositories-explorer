@@ -33,13 +33,13 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
   const { ref: scrollAreaRef } = useResponsiveParentHeight()
   const {
     // submit status
-    loading,
+    loading: searchUserLoading,
 
     // Responsive form data, the content is determined by initialForm
-    data,
+    data: searchUserResponse,
 
     // submit data function
-    send,
+    send: searchUserSend,
 
   } = useRequest(searchGitHubUser, {
     immediate: false,
@@ -51,11 +51,11 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
   })
 
   const displayedUsers = useMemo(() => {
-    return data.items.slice(0, 5)
-  }, [data.items])
+    return searchUserResponse.items.slice(0, 5)
+  }, [searchUserResponse.items])
 
   function onSubmit(data: z.infer<typeof searchUserFormSchema>) {
-    send(data.username)
+    searchUserSend(data.username)
   }
 
   return (
@@ -63,13 +63,13 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
       <CardContent className="flex flex-col grow gap-4 px-0 min-h-0">
         <FieldSet className="px-6">
           <FieldLegend>GitHub User Repositories Explorer</FieldLegend>
-          <SearchUserForm loading={loading} onSubmit={onSubmit} />
+          <SearchUserForm loading={searchUserLoading} onSubmit={onSubmit} />
         </FieldSet>
 
         <div className="SearchUserCard__search-result flex-1 border-t border-b min-h-0">
           <ScrollArea
             ref={scrollAreaRef}
-            className="bg-background h-full"
+            className="h-full"
           >
             <Accordion type="single" collapsible>
               {displayedUsers.map((user) => (
