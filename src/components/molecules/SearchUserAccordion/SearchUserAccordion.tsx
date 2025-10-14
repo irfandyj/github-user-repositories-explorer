@@ -45,7 +45,7 @@ export default function SearchUserAccordion({ users }: SearchUserAccordionProps)
   }
 
   return (
-    <Accordion type="single" collapsible>
+    <Accordion type="single" collapsible data-testid="search-user-accordion">
       {users.map((user) => (
         <AccordionItem key={user.id} value={user.id.toString()}>
           <AccordionTrigger

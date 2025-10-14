@@ -4,7 +4,7 @@ import SearchUserCard from './components/organisms/SearchUserCard'
 function App() {
   return (
     <>
-      <div className="flex justify-center items-center h-screen w-screen p-4">
+      <div className="flex justify-center items-center h-screen w-screen p-4" data-testid="app">
         <SearchUserCard className="max-h-10/12 h-full grow" />
       </div>
     </>

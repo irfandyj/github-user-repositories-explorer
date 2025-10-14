@@ -23,7 +23,12 @@ export default function SearchUserForm({ onSubmit, loading }: SearchUserFormProp
   })
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+    <form
+      id="search-user-form"
+      data-testid="search-user-form"
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-3"
+    >
       <FieldGroup>
         <Field data-invalid={!!form.formState.errors.username}>
           <FieldLabel htmlFor="search" className="sr-only">Search</FieldLabel>
@@ -38,7 +43,7 @@ export default function SearchUserForm({ onSubmit, loading }: SearchUserFormProp
             />
             <InputGroupAddon className={form.formState.errors.username ? 'text-destructive' : ''}>
               {loading ?
-                <Loader2 className="animate-spin" /> :
+                <Loader2 data-testid="loading-icon" className="animate-spin" /> :
                 <Search />
               }
             </InputGroupAddon>
