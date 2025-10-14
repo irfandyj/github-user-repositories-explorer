@@ -13,7 +13,7 @@ import {
 import { useRequest } from "alova/client";
 import * as z from 'zod';
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useResponsiveParentHeight from "@/hooks/useResponsiveParentHeight";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -50,6 +50,10 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
     },
   })
 
+  const displayedUsers = useMemo(() => {
+    return data.items.slice(0, 5)
+  }, [data.items])
+
   function onSubmit(data: z.infer<typeof searchUserFormSchema>) {
     send(data.username)
   }
@@ -68,7 +72,7 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
             className='px-6'
           >
             <Accordion type="single" collapsible>
-              {data.items.map((user) => (
+              {displayedUsers.map((user) => (
                 <AccordionItem key={user.id} value={user.id.toString()}>
                   <AccordionTrigger className="flex items-center gap-2">
                     <Avatar>
