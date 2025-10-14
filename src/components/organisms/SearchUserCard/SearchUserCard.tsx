@@ -66,15 +66,14 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
           <SearchUserForm loading={loading} onSubmit={onSubmit} />
         </FieldSet>
 
-        <div className="SearchUserCard__search-result flex-1">
+        <div className="SearchUserCard__search-result flex-1 border-t border-b">
           <ScrollArea
             ref={scrollAreaRef}
-            className='px-6'
           >
             <Accordion type="single" collapsible>
               {displayedUsers.map((user) => (
                 <AccordionItem key={user.id} value={user.id.toString()}>
-                  <AccordionTrigger className="flex items-center gap-2">
+                  <AccordionTrigger className="flex items-center gap-2 px-6">
                     <Avatar>
                       <AvatarImage src={user.avatar_url} />
                       <AvatarFallback>{user.login.charAt(0)}</AvatarFallback>
@@ -88,7 +87,7 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
                       {user.login}
                     </a>
                   </AccordionTrigger>
-                  <AccordionContent>
+                  <AccordionContent className="px-6">
                     {user.html_url}
                   </AccordionContent>
                 </AccordionItem>
