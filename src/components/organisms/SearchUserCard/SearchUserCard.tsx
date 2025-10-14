@@ -85,7 +85,8 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
           >
             <SearchUserAccordion
               users={displayedUsers}
-              loading={searchReposByUsernameLoading}
+              usersLoading={searchUserLoading}
+              dataLoading={searchReposByUsernameLoading}
               data={searchReposByUsernameResponse}
               send={searchReposByUsernameSend}
             />

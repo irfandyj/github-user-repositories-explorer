@@ -10,6 +10,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
+import { Skeleton } from "@/components/ui/skeleton";
 
 type SearchUserAccordionProps = {
   users: {
@@ -18,7 +19,8 @@ type SearchUserAccordionProps = {
     avatar_url: string
     html_url: string
   }[] | undefined,
-  loading: boolean,
+  usersLoading: boolean,
+  dataLoading: boolean,
   data: {
     id: number
     name: string
@@ -30,18 +32,31 @@ type SearchUserAccordionProps = {
 }
 
 export default function SearchUserAccordion(
-  { users, loading, data, send }: SearchUserAccordionProps
+  { users, usersLoading, dataLoading, data, send }: SearchUserAccordionProps
 ) {
 
   function onAccordionTriggerClick(username: string) {
     send(username)
   }
 
+  if (usersLoading) {
+    return (
+      <div className="flex flex-col">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div key={index} className="flex gap-2 py-4 px-6 border-t">
+            <Skeleton className="size-8 rounded-full" />
+            <Skeleton className="flex-1" />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   switch (typeof users) {
     case 'undefined':
       return null
     default:
-      if (users.length === 0) {
+      if (users!.length === 0) {
         return (
           <Empty>
             <EmptyHeader>
@@ -56,7 +71,7 @@ export default function SearchUserAccordion(
       }
       return (
         <Accordion type="single" collapsible data-testid="search-user-accordion">
-          {users.map((user) => (
+          {users!.map((user) => (
             <AccordionItem key={user.id} value={user.id.toString()}>
               <AccordionTrigger
                 className="flex items-center gap-2 px-6"
@@ -93,7 +108,7 @@ export default function SearchUserAccordion(
                 </a>
               </AccordionTrigger>
               <AccordionContent className="px-6">
-                {loading ?
+                {dataLoading ?
                   <Loader2 className="animate-spin" /> : (
                     <div className="flex flex-col gap-2">
                       {data.length > 0 ?
