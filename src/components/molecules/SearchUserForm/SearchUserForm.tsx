@@ -33,6 +33,7 @@ export default function SearchUserForm({ onSubmit, loading }: SearchUserFormProp
               placeholder="Enter username"
               aria-invalid={!!form.formState.errors.username}
               className={form.formState.errors.username ? 'placeholder:text-destructive' : ''}
+              autoComplete="off"
               {...form.register('username')}
             />
             <InputGroupAddon className={form.formState.errors.username ? 'text-destructive' : ''}>
