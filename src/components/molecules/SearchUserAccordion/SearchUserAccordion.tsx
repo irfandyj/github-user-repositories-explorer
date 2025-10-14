@@ -43,7 +43,11 @@ export default function SearchUserAccordion(
     return (
       <div className="flex flex-col">
         {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className="flex gap-2 py-4 px-6 border-t">
+          <div
+            key={index}
+            className="flex gap-2 py-4 px-6 border-t"
+            data-testid="search-user-accordion-skeleton"
+          >
             <Skeleton className="size-8 rounded-full" />
             <Skeleton className="flex-1" />
           </div>
@@ -82,7 +86,10 @@ export default function SearchUserAccordion(
                   }
                 }}
               >
-                <Avatar>
+                <Avatar
+                  className="SearchUserAccordion__accordion-trigger-avatar"
+                  data-testid="user-avatar"
+                >
                   <AvatarImage src={user.avatar_url} />
                   <AvatarFallback>{user.login.charAt(0)}</AvatarFallback>
                 </Avatar>
@@ -109,7 +116,7 @@ export default function SearchUserAccordion(
               </AccordionTrigger>
               <AccordionContent className="px-6">
                 {dataLoading ?
-                  <Loader2 className="animate-spin" /> : (
+                  <Loader2 className="animate-spin" data-testid="SearchUserAccordion__data-loader" /> : (
                     <div className="flex flex-col gap-2">
                       {data.length > 0 ?
                         data.map((repo) => (
