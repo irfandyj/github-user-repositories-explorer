@@ -15,6 +15,7 @@ import * as z from 'zod';
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import useResponsiveParentHeight from "@/hooks/useResponsiveParentHeight";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function searchGitHubUser(username: string) {
   return Apis.search.searchUsers({
@@ -69,7 +70,20 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
             <Accordion type="single" collapsible>
               {data.items.map((user) => (
                 <AccordionItem key={user.id} value={user.id.toString()}>
-                  <AccordionTrigger>{user.login}</AccordionTrigger>
+                  <AccordionTrigger className="flex items-center gap-2">
+                    <Avatar>
+                      <AvatarImage src={user.avatar_url} />
+                      <AvatarFallback>{user.login.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <a
+                      href={user.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="!text-muted-foreground"
+                    >
+                      {user.login}
+                    </a>
+                  </AccordionTrigger>
                   <AccordionContent>
                     {user.html_url}
                   </AccordionContent>
