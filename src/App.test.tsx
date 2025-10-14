@@ -7,7 +7,9 @@ describe('App', () => {
     render(<App />)
     expect(screen.getByTestId('app')).toBeInTheDocument()
   })
-})
 
-it.todo('should render SearchUserCard')
-it.todo('should render in the middle of the screen')
+  it('should render SearchUserCard', () => {
+    render(<App />)
+    expect(screen.getByTestId('search-user-card')).toBeInTheDocument()
+  })
+})
