@@ -56,14 +56,14 @@ export default function SearchUserCard({ className }: SearchUserCardProps) {
 
   return (
     <Card className={cn("w-full max-w-md overflow-hidden", className)}>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         <FieldSet>
           <FieldLegend>GitHub User Repositories Explorer</FieldLegend>
           <SearchUserForm loading={loading} onSubmit={onSubmit} />
         </FieldSet>
 
         {data.items.length > 0 && (
-          <div className='mt-4 size-full'>
+          <div className=''>
             <ul className="list-disc list-inside">
               {data.items.map((user) => (
                 <li key={user.id}>{user.login}</li>

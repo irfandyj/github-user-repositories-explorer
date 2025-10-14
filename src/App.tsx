@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <div className="flex justify-center items-center h-screen w-screen p-4">
-        <SearchUserCard className="max-h-10/12" />
+        <SearchUserCard className="max-h-10/12 h-full grow" />
       </div>
     </>
   )
