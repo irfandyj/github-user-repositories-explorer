@@ -58,7 +58,7 @@ export default function SearchUserAccordion(
 
   switch (typeof users) {
     case 'undefined':
-      return null
+      return <div data-testid="search-user-accordion"></div>
     default:
       if (users!.length === 0) {
         return (
@@ -76,7 +76,7 @@ export default function SearchUserAccordion(
       return (
         <Accordion type="single" collapsible data-testid="search-user-accordion">
           {users!.map((user) => (
-            <AccordionItem key={user.id} value={user.id.toString()}>
+            <AccordionItem key={user.id} value={user.id.toString()} data-testid="SearchUserAccordion__accordion-item">
               <AccordionTrigger
                 className="flex items-center gap-2 px-6"
                 onClick={(e) => {

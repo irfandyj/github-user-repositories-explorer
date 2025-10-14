@@ -35,6 +35,7 @@ export default function SearchUserForm({ onSubmit, loading }: SearchUserFormProp
           <InputGroup className="border-border bg-background">
             <InputGroupInput
               id="search"
+              data-testid="SearchUserForm__input"
               placeholder="Enter username"
               aria-invalid={!!form.formState.errors.username}
               className={form.formState.errors.username ? 'placeholder:text-destructive' : ''}
