@@ -1,9 +1,7 @@
 import './App.css'
 import SearchUserCard from './components/organisms/SearchUserCard'
 
-
 function App() {
-
   return (
     <>
       <div className="flex justify-center items-center h-screen w-screen p-4">
