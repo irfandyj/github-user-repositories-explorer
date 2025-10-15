@@ -33,7 +33,6 @@ A modern React application that allows users to search for GitHub users and expl
 ### UI & Styling
 - **Radix UI** - Accessible component primitives
 - **Lucide React** - Beautiful icons
-- **Next Themes** - Theme management
 - **Sonner** - Toast notifications
 
 ### State Management & API
@@ -214,7 +213,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Irfandy Jiputra**
 - GitHub: [@irfandyj](https://github.com/irfandyj)
 - Project: [GitHub Repositories Explorer](https://github.com/irfandyj/github-user-repositories-explorer)
 
